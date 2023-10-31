@@ -1,4 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
+import { useEffect } from "react";
+import { io } from 'socket.io-client'
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,6 +10,15 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  useEffect(() => {
+    const ws = io()
+    ws.on('connect', () => {
+      ws.emit('echo2', '좇까')
+    })
+    return () => {
+      ws.disconnect()
+    }
+  }, [])
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to Remix</h1>
