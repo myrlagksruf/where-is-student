@@ -1,0 +1,12 @@
+svg{
+    .room-container{
+        fill:red
+    }
+    .room {
+        fill-opacity: 0;
+        transition:fill-opacity 0.5s
+    }
+    .room:hover{
+        fill-opacity: 0.1;
+    }
+}

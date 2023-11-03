@@ -6,15 +6,18 @@
 
 import { PassThrough } from "node:stream";
 
-import type { AppLoadContext, EntryContext } from "@remix-run/node";
-import { createReadableStreamFromReadable } from "@remix-run/node";
+import type { AppLoadContext, DataFunctionArgs, EntryContext } from "@remix-run/node";
+import { createReadableStreamFromReadable, redirect } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+import { hanAuth } from "./lib/cookies.server";
+import { prisma } from "./lib/prisma.server";
+import { checkCookie } from "./lib/login.server";
 
 const ABORT_DELAY = 5_000;
 
-export default function handleRequest(
+export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
@@ -22,13 +25,13 @@ export default function handleRequest(
   loadContext: AppLoadContext
 ) {
   return isbot(request.headers.get("user-agent"))
-    ? handleBotRequest(
+    ? await handleBotRequest(
         request,
         responseStatusCode,
         responseHeaders,
         remixContext
       )
-    : handleBrowserRequest(
+    : await handleBrowserRequest(
         request,
         responseStatusCode,
         responseHeaders,

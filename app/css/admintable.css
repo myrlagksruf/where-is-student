@@ -1,0 +1,48 @@
+table {
+    --primary-color: #008cba;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 0 2em;
+
+    & thead {
+        border-bottom: 3px solid var(--primary-color);
+
+        & th {
+            padding: 0.35em 0 .35em;
+            font-weight: 400;
+            text-align: left;
+            font-size: 1.25em;
+        }
+
+    }
+
+    & tbody {
+        border-bottom: 3px solid var(--primary-color);
+
+        & tr {
+            border-bottom: 2px solid #ddd;
+
+            & td {
+                padding: .75em 0;
+            }
+        }
+    }
+
+    & tfoot {
+
+        & td {
+            /* padding: 0.35em 0 .35em; */
+            text-align: left;
+            & button{
+                box-sizing: border-box;
+                padding:0.35em;
+                width:40px;
+                height: 40px;
+                font-size: 1em;
+                &.active {
+                    background-color: #008cba;
+                }
+            }
+        }
+    }
+}

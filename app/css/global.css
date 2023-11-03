@@ -1,0 +1,38 @@
+body{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    margin:0;
+    overflow:hidden;
+    min-height: 0;
+}
+
+header{
+    height: 40px;
+    background-color: ghostwhite;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    padding:5px 20px;
+    gap:10px;
+}
+
+.logout {
+    display: flex;
+    background-color: #ea4c88;
+    color: #eee;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 0.25rem;
+    height: 100%;
+    outline: none;
+    border:none;
+    cursor: pointer;
+    align-items: center;
+    text-decoration: none;
+    padding:0 10px;
+}
+
+.logout:hover {
+    background-color: #d44179;
+}

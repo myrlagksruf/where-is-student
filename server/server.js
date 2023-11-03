@@ -3,7 +3,7 @@ import url from "node:url";
 import path from "node:path";
 import fastify from "fastify";
 import { createRequestHandler, getEarlyHintLinks } from "@mcansh/remix-fastify";
-import { broadcastDevReady, installGlobals } from "@remix-run/node";
+import { broadcastDevReady, createCookie, installGlobals } from "@remix-run/node";
 import { fastifyEarlyHints } from "@fastify/early-hints";
 import { fastifyStatic } from "@fastify/static";
 import socketinit from './ws.js'
@@ -41,7 +41,6 @@ const noopContentParser = (_request, payload, done) => {
 
 app.addContentTypeParser("application/json", noopContentParser);
 app.addContentTypeParser("*", noopContentParser);
-
 await app.register(fastifyEarlyHints, { warn: true });
 
 await app.register(fastifyStatic, {
@@ -75,7 +74,6 @@ app.all("*", async (request, reply) => {
     const links = getEarlyHintLinks(request, initialBuild);
     await reply.writeEarlyHintsLinks(links);
   }
-
   return handler(request, reply);
 });
 
