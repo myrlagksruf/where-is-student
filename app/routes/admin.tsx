@@ -1,9 +1,12 @@
 import { useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { action as pgUpdateAction } from "./admin.api.pg.update";
 import { useEffect, useMemo } from "react";
-import { ActionFunction, ActionFunctionArgs, LinksFunction, LoaderFunction, LoaderFunctionArgs, json } from "@remix-run/node";
+import { LinksFunction, LoaderFunctionArgs, json } from "@remix-run/node";
 import { getStudent, getStudentCount } from "~/lib/prisma.server";
 import tablecss from '~/css/admintable.css'
+import { action as locationAction } from "./admin.api.location";
+import locationjson from '~/lib/location.json'
+import { action as changeAction } from "./admin.api.change";
 
 export const links:LinksFunction = () => [
     {rel:'stylesheet', href:tablecss}
@@ -24,15 +27,18 @@ export const loader = async ({request}:LoaderFunctionArgs) => {
 export default function Page(){
     const students = useLoaderData<typeof loader>()
     const studentFetcher = useFetcher<typeof pgUpdateAction>()
-    const [searchParams, setSearchParams] = useSearchParams();
+    const locationFetcher = useFetcher<typeof locationAction>()
+    const changeFetcher = useFetcher<typeof changeAction>()
+    const [searchParams, setSearchParams] = useSearchParams()
     const nav = useNavigate()
     useEffect(() => {
-        if(studentFetcher.data){
+        if(studentFetcher.data || locationFetcher.data){
             nav({
                 search:'skip=0&count=10'
             })
         }
-    }, [studentFetcher])
+    }, [studentFetcher, locationFetcher])
+    
     const curSkip = useMemo(() => {
         let s = Math.floor(Number(searchParams.get('skip')) / 10)
         if(isNaN(s)){
@@ -51,16 +57,23 @@ export default function Page(){
             width:'100%'
         }}>
             <h1>관리자 페이지입니다.</h1>
-            <studentFetcher.Form action="/admin/api/pg/update" method="POST">
-                <div>{studentFetcher.data?.status && `${studentFetcher.data.data.date} 업데이트 완료`}</div>
-                <button type="submit">전체 목록 업데이트</button>
-            </studentFetcher.Form>
+            <div style={{display:'flex'}}>
+                <studentFetcher.Form action="/admin/api/pg/update" method="POST">
+                    <button type="submit">전체 목록 업데이트</button>
+                    <div>{studentFetcher.data && `${studentFetcher.data.data?.date} 업데이트 완료`}</div>
+                </studentFetcher.Form>
+                <locationFetcher.Form action="/admin/api/location" method="POST">
+                    <button type="submit">장소 목록 업데이트</button>
+                    <div>{locationFetcher.data && `${locationFetcher.data.data?.date} 업데이트 완료`}</div>
+                </locationFetcher.Form>
+            </div>
             <table id="rwd-table">
                 <thead>
                     <tr>
                         <th>학생</th>
                         <th>학생아이디</th>
                         <th>위치</th>
+                        <th>테스트하기</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +81,14 @@ export default function Page(){
                         return <tr key={i}>
                             <td>{v.name}</td>
                             <td>{v.user_id}</td>
-                            <td>X</td>
+                            <td>{v.cur ? locationjson.find(t => v.cur?.loc_id === t.id)?.name : 'X'}</td>
+                            <td>
+                                {[...locationjson, { name:'X', id:'X'}].map((t, j) => {
+                                    return <button key={j} onClick={e => {
+                                        
+                                    }}>{t.name}</button>
+                                })}
+                            </td>
                         </tr>
                     })}
                 </tbody>

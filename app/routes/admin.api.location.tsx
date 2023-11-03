@@ -1,17 +1,20 @@
 import { json } from "@remix-run/node";
-import { pgUpdate } from "~/lib/pg.server";
+import { locationUpdate } from "~/lib/prisma.server";
 
 export const action = async () => {
     try{
-        const count = await pgUpdate()
+        await locationUpdate()
         return json({
             status:true,
             data:{
-                count,
                 date:new Date()
             }
         })
     } catch(err){
-        return json({status:false, reason:String(err), data:null}, 500)
+        return json({
+            status:false,
+            reason:String(err),
+            data:null
+        }, 500)
     }
 }

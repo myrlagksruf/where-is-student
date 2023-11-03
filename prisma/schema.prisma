@@ -15,7 +15,7 @@ model Student{
     name String
     hash String
     type String
-    curs CurrentState[]
+    cur CurrentState?
 }
 
 model Login{
@@ -34,7 +34,7 @@ model Location{
 model CurrentState{
     id String @id
     loc_id String
-    user_id String
+    user_id String @unique
     loc Location  @relation(fields: [loc_id], references: [id])
     std Student @relation(fields: [user_id], references: [user_id])
 }
