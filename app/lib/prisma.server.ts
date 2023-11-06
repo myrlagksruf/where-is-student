@@ -22,6 +22,33 @@ export const getStudent = async (skip:number, count:number) => {
     return students
 }
 
+export const getStudentAllForTeacher = async () => {
+    await prisma.$connect()
+    const students = await prisma.student.findMany({
+        select:{
+            user_id:true,
+            cur:{
+                select:{
+                    loc_id:true
+                }
+            }
+        },
+        where:{
+            type:'student',
+            cur:{
+                loc_id:{
+                    not:'X'
+                }
+            }
+        },
+        orderBy:{
+            user_id:"asc"
+        }
+    })
+    await prisma.$disconnect()
+    return students
+}
+
 export const getStudentCount = async () => {
     await prisma.$connect()
     const count = await prisma.student.count({
@@ -35,57 +62,61 @@ export const getStudentCount = async () => {
 
 export const locationUpdate = async () => {
     await prisma.$connect()
-    await prisma.$transaction(async tx => {
-        const arr = []
-        for(let i of locationjson){
-            arr.push(tx.location.upsert({
-                create:i,
-                update:i,
-                where:{
-                    id:i.id
-                }
-            }))
+    await prisma.$transaction(locationjson.map(v => prisma.location.upsert({
+        create:{ 
+            id:v.id,
+            name:v.name
+        },
+        update:{
+            id:v.id,
+            name:v.name
+        },
+        where:{
+            id:v.id
         }
-        await Promise.all(arr)
-    })
+    })))
     await prisma.$disconnect()
 }
 
 export const changeLocation = async (user_id:string, loc_id:string) => {
     await prisma.$connect()
-    await prisma.$transaction(async tx => {
-        const data = await tx.currentState.findFirst({
+    if(loc_id === 'X'){
+        await prisma.currentState.deleteMany({
             where:{
                 user_id
             }
         })
-        const updateObj = {
-            loc:{
-                connect:{
-                    id:loc_id
+    }else{
+        await prisma.currentState.upsert({
+            where: {
+                user_id
+            },
+            update:{
+                std:{
+                    connect:{
+                        user_id
+                    }
+                },
+                loc:{
+                    connect:{
+                        id:loc_id
+                    }
                 }
             },
-            std:{
-                connect:{
-                    user_id
-                }
-            }
-        }
-        if(data){
-            await tx.currentState.update({
-                data:updateObj,
-                where:{
-                    id:data.id
-                }
-            })
-            return
-        }
-        await tx.currentState.create({
-            data:{
+            create:{
                 id:crypto.randomUUID(),
-                ...updateObj
+                std:{
+                    connect:{
+                        user_id
+                    }
+                },
+                loc:{
+                    connect:{
+                        id:loc_id
+                    }
+                }
             }
         })
-    })
+    }
     await prisma.$disconnect()
 }

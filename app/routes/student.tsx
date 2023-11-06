@@ -1,6 +1,4 @@
-import { LoaderFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { prisma } from "~/lib/prisma.server";
 
 // export const loader:LoaderFunction = async () => {
     

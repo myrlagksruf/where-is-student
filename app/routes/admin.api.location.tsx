@@ -11,6 +11,7 @@ export const action = async () => {
             }
         })
     } catch(err){
+        console.log(err)
         return json({
             status:false,
             reason:String(err),

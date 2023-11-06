@@ -1,28 +1,37 @@
 [{
     "name":"1강의실",
-    "id":"gang1"
+    "id":"gang1",
+    "place":"bottom"
 },{
     "name":"2강의실",
-    "id":"gang2"
+    "id":"gang2",
+    "place":"bottom"
 },{
     "name":"3강의실",
-    "id":"gang3"
+    "id":"gang3",
+    "place":"bottom"
 },{
     "name":"4강의실",
-    "id":"gang4"
+    "id":"gang4",
+    "place":"top"
 },{
     "name":"5강의실",
-    "id":"gang5"
+    "id":"gang5",
+    "place":"top"
 },{
     "name":"6강의실",
-    "id":"gang6"
+    "id":"gang6",
+    "place":"top"
 },{
     "name":"교무실",
-    "id":"gyo"
+    "id":"gyo",
+    "place":"top"
 },{
     "name":"상담실",
-    "id":"sang"
+    "id":"sang",
+    "place":"top"
 },{
     "name":"탕비실",
-    "id":"tang"
+    "id":"tang",
+    "place":"bottom"
 }]

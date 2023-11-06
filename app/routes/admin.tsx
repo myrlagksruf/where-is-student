@@ -1,12 +1,12 @@
 import { useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
-import { action as pgUpdateAction } from "./admin.api.pg.update";
 import { useEffect, useMemo } from "react";
 import { LinksFunction, LoaderFunctionArgs, json } from "@remix-run/node";
 import { getStudent, getStudentCount } from "~/lib/prisma.server";
 import tablecss from '~/css/admintable.css'
-import { action as locationAction } from "./admin.api.location";
-import locationjson from '~/lib/location.json'
-import { action as changeAction } from "./admin.api.change";
+import { StudentRow } from "~/lib/admin.lib";
+import type { action as pgUpdateAction } from "./admin.api.pg.update";
+import type { action as locationAction } from "./admin.api.location";
+import type { action as changeAction } from "./student.api.change";
 
 export const links:LinksFunction = () => [
     {rel:'stylesheet', href:tablecss}
@@ -31,13 +31,6 @@ export default function Page(){
     const changeFetcher = useFetcher<typeof changeAction>()
     const [searchParams, setSearchParams] = useSearchParams()
     const nav = useNavigate()
-    useEffect(() => {
-        if(studentFetcher.data || locationFetcher.data){
-            nav({
-                search:'skip=0&count=10'
-            })
-        }
-    }, [studentFetcher, locationFetcher])
     
     const curSkip = useMemo(() => {
         let s = Math.floor(Number(searchParams.get('skip')) / 10)
@@ -46,6 +39,12 @@ export default function Page(){
         }
         return s
     }, [searchParams])
+    useEffect(() => {
+        nav({
+            search:'skip=0&count=10'
+        }, {replace:true})
+    }, [studentFetcher, locationFetcher])
+
     const pages = useMemo(() => Array(Math.ceil(students.count / 10)).fill(0).map((_, i) => i + 1), [students])
     return <div style={{
         display:'flex',
@@ -77,20 +76,7 @@ export default function Page(){
                     </tr>
                 </thead>
                 <tbody>
-                    {students.students.map((v, i) => {
-                        return <tr key={i}>
-                            <td>{v.name}</td>
-                            <td>{v.user_id}</td>
-                            <td>{v.cur ? locationjson.find(t => v.cur?.loc_id === t.id)?.name : 'X'}</td>
-                            <td>
-                                {[...locationjson, { name:'X', id:'X'}].map((t, j) => {
-                                    return <button key={j} onClick={e => {
-                                        
-                                    }}>{t.name}</button>
-                                })}
-                            </td>
-                        </tr>
-                    })}
+                    {students.students.map((v, i) => <StudentRow student={v} key={i} fetcher={changeFetcher} />)}
                 </tbody>
                 <tfoot>
                     <tr>

@@ -1,4 +1,4 @@
-import React from "react"
+import type React from "react"
 
 export const TeacherMap:React.FunctionComponent<{onClick:React.MouseEventHandler<SVGSVGElement>}> = ({onClick}) =>{
     return <svg
@@ -692,36 +692,42 @@ export const TeacherMap:React.FunctionComponent<{onClick:React.MouseEventHandler
     </g>
     <g className="room-container" opacity="1">
       <path
+        data-tooltip-id="gang3"
         className="gang3 room"
         strokeWidth="1.226"
         d="M4.96 7.725H391.279V182.988H4.96z"
       ></path>
       <path
+        data-tooltip-id="gang2"
         className="gang2 room"
         strokeWidth="0.693"
         d="M400.497 7.452H523.922V182.715H400.497z"
       ></path>
       <path
+        data-tooltip-id="gang1"
         className="gang1 room"
         strokeWidth="0.743"
         d="M531.848 7.452H673.786V182.715H531.848z"
       ></path>
       <path
+        data-tooltip-id="gang4"
         className="gang4 room"
         strokeWidth="1.079"
         d="M6.017 192.845H203.496V458.51599999999996H6.017z"
       ></path>
       <path
+        data-tooltip-id="gang5"
         className="gang5 room"
         strokeWidth="0.811"
         d="M210.994 311.731H412.947V458.606H210.994z"
       ></path>
       <path
+        data-tooltip-id="gang6"
         className="gang6 room"
         strokeWidth="0.835"
         d="M501.953 271.563H670.415V458.039H501.953z"
       ></path>
-      <g className="gyo room">
+      <g className="gyo room" data-tooltip-id="gyo">
         <path
           className="gyo"
           strokeWidth="0.582"
@@ -734,11 +740,13 @@ export const TeacherMap:React.FunctionComponent<{onClick:React.MouseEventHandler
         ></path>
       </g>
       <path
+        data-tooltip-id="sang"
         className="sang room"
         strokeWidth="0.561"
         d="M904.357 312.718H1000.924V459.39H904.357z"
       ></path>
       <path
+        data-tooltip-id="tang"
         className="tang room"
         strokeWidth="0.4"
         d="M904.574 8.797H1002.067V82.648H904.574z"
