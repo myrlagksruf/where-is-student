@@ -6,7 +6,7 @@ import locationjson from '~/lib/location.json'
 
 
 export const StudentRow:React.FunctionComponent<{
-    student:Partial<Student> & { cur: CurrentState|null},
+    student:Partial<Student> & { cur: Partial<CurrentState>|null},
     fetcher:ReturnType<typeof useFetcher>
 }> = ({student, fetcher}) => {
     const datas = [...locationjson, { name:'X', id:'X'}]

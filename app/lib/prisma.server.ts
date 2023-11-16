@@ -12,7 +12,11 @@ export const getStudent = async (skip:number, count:number) => {
         select:{
             user_id:true,
             name:true,
-            cur:true
+            cur:{
+                select:{
+                    loc_id:true
+                }
+            }
         },
         where:{
             type:'student'
